@@ -1,0 +1,7 @@
+management:
+    endpoints:
+        jmx:
+            exposure:
+                include: '*'
+server:
+    port: 8081

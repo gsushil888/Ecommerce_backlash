@@ -1,4 +1,4 @@
-package com.backlashprogramming.ecommerce.EcommerceByBacklash;
+package com.backlashprogramming.ecommerce.EcommerceByBacklash.test;
 
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,5 +11,16 @@ public class TestController {
     public String test(){
         return "test";
     }
+
+    @GetMapping("/test2")
+    public String test2(){
+        return "test2";
+    }
+
+    @GetMapping("/test3")
+    public String test3(){
+        return "test3";
+    }
+
 
 }

@@ -82,14 +82,4 @@ public class RegistrationBody {
         this.lastName = lastName;
     }
 
-    @Override
-    public String toString() {
-        return "RegistrationBody{" +
-                "username='" + username + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                '}';
-    }
 }

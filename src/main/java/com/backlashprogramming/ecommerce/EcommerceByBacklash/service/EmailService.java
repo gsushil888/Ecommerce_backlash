@@ -16,13 +16,12 @@ public class EmailService {
     @Value("${email.from}")
     private  String fromAddress;
 
-
     @Value("${app.frontend.url}")
     private  String url;
 
-
     @Autowired
     private JavaMailSender javaMailSender;
+
 
     private SimpleMailMessage makeMailMessage(){
         SimpleMailMessage simpleMailMessage=new SimpleMailMessage();

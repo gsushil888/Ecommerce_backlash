@@ -25,7 +25,6 @@ public class VerificationToken {
     private LocalUser localUser;
 
 
-
     public Long getId() {
         return id;
     }

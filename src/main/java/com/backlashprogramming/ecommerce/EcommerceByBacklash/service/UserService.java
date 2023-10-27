@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -43,49 +44,68 @@ public class UserService {
         }
 
         LocalUser localUser = new LocalUser();
-
         localUser.setEmail(registrationBody.getEmail());
         localUser.setFirstName(registrationBody.getFirstName());
         localUser.setLastName(registrationBody.getLastName());
         localUser.setUserName(registrationBody.getUsername());
         localUser.setPassword(encryptionService.encryptPassword(registrationBody.getPassword()));
-        localUser = localUserDao.save(localUser);
 
-        VerificationToken verificationToken=createVerificationToken(localUser);
+        VerificationToken verificationToken = createVerificationToken(localUser);
         emailService.sendVerificationEmail(verificationToken);
+
         return localUserDao.save(localUser);
     }
 
-    private VerificationToken createVerificationToken(LocalUser user){
-        VerificationToken verificationToken=new VerificationToken();
+    private VerificationToken createVerificationToken(LocalUser user) {
+        VerificationToken verificationToken = new VerificationToken();
         verificationToken.setToken(jwtService.generateVerificationJWT(user));
         verificationToken.setCreatedTimeStamp(new Timestamp(System.currentTimeMillis()));
         verificationToken.setLocalUser(user);
         user.getVerificationTokens().add(verificationToken);
-        return  verificationToken;
+        return verificationToken;
     }
 
-    public String loginUser(LoginBody loginBody) throws UserNotVerifiedException {
+    public String loginUser(LoginBody loginBody) throws UserNotVerifiedException, EmailFailureException {
 
         Optional<LocalUser> opUser = localUserDao.findByUserNameIgnoreCase(loginBody.getUsername());
-        if (opUser.isPresent())
-        {
-            LocalUser user=opUser.get();
-            if (encryptionService.verifyPassword(loginBody.getPassword(),user.getPassword()))
-            {
-                if (user.getIsEmailVerified()){
-                    return  jwtService.generateJWT(user);
-                }
-                else {
-                    throw  new UserNotVerifiedException(user.getIsEmailVerified());
+        if (opUser.isPresent()) {
+            LocalUser user = opUser.get();
+            if (encryptionService.verifyPassword(loginBody.getPassword(), user.getPassword())) {
+                if (user.getIsEmailVerified()) {
+                    return jwtService.generateJWT(user);
+                } else {
+                    List<VerificationToken> verificationTokens = user.getVerificationTokens();
+                    boolean resend = verificationTokens.size() == 0
+                            || verificationTokens.get(0).getCreatedTimeStamp().before(new Timestamp(System.currentTimeMillis() - (60 * 60 * 1000)));
+                    if (resend) {
+                        VerificationToken verificationToken = createVerificationToken(user);
+                        verificationTokenDao.save(verificationToken);
+                        emailService.sendVerificationEmail(verificationToken);
+                    }
+                    throw new UserNotVerifiedException(resend);
                 }
 
             }
 
         }
         return null;
-
     }
 
+    public boolean verifyUser(String token) {
+
+        Optional<VerificationToken> optionalVerificationToken = verificationTokenDao.findByToken(token);
+        if (optionalVerificationToken.isPresent()) {
+            VerificationToken verificationToken = optionalVerificationToken.get();
+            LocalUser user = verificationToken.getLocalUser();
+            if (!user.getIsEmailVerified()) {
+                user.setIsEmailVerified(true);
+                localUserDao.save(user);
+                verificationTokenDao.deleteByLocalUser(user);
+                return true;
+
+            }
+        }
+        return false;
+    }
 
 }

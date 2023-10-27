@@ -12,7 +12,6 @@ import java.util.Date;
 @Service
 public class JwtService {
 
-
     @Value("${jwt.algorithm.key}")
     private String algorithmKey;
 
@@ -38,7 +37,6 @@ public class JwtService {
                 .withIssuer(issuer)
                 .sign(algorithm);
     }
-
 
     public  String generateVerificationJWT(LocalUser user){
         return JWT.create().withClaim(EMAIL_KEY, user.getUserName())

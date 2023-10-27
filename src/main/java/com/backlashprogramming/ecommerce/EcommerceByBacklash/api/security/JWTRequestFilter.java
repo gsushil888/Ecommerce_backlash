@@ -50,7 +50,7 @@ public class JWTRequestFilter extends OncePerRequestFilter {
 
             }
             catch (Exception e){
-                log.info("Something went wrong while decoding token");
+                log.error("Something went wrong at filter");
             }
         }
         filterChain.doFilter(request,response);

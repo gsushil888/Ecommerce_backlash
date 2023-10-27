@@ -12,4 +12,5 @@ public class UserNotVerifiedException extends  Exception{
     public  boolean isNewEmailSent(){
         return  newEmailSent;
     }
+
 }

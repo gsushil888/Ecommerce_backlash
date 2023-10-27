@@ -10,6 +10,4 @@ public interface OrderDao  extends JpaRepository<Orders,Long> {
 
     List<Orders> findByUser(LocalUser user);
 
-
-
 }

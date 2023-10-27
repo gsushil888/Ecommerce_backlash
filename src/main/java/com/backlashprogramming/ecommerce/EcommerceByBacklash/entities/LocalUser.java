@@ -1,11 +1,7 @@
 package com.backlashprogramming.ecommerce.EcommerceByBacklash.entities;
 
-import com.backlashprogramming.ecommerce.EcommerceByBacklash.entities.Address;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
-import org.springframework.data.repository.cdi.Eager;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,5 +1,6 @@
 package com.backlashprogramming.ecommerce.EcommerceByBacklash.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -23,6 +24,7 @@ public class Address {
     @Column(name = "country", nullable = false, length = 75)
     private String country;
 
+    @JsonIgnore
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     private LocalUser user;
@@ -87,15 +89,5 @@ public class Address {
         this.user = user;
     }
 
-    @Override
-    public String toString() {
-        return "Address{" +
-                "id=" + id +
-                ", addressLine1='" + addressLine1 + '\'' +
-                ", addressLine2='" + addressLine2 + '\'' +
-                ", city='" + city + '\'' +
-                ", country='" + country + '\'' +
-                ", user=" + user +
-                '}';
-    }
+
 }

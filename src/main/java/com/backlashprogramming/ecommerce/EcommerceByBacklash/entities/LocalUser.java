@@ -1,7 +1,11 @@
 package com.backlashprogramming.ecommerce.EcommerceByBacklash.entities;
 
 import com.backlashprogramming.ecommerce.EcommerceByBacklash.entities.Address;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+import org.springframework.data.repository.cdi.Eager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +22,7 @@ public class LocalUser {
     @Column(name = "username", nullable = false, unique = true)
     private String userName;
 
+    @JsonIgnore
     @Column(name = "password", nullable = false, length = 1000)
     private String password;
 
@@ -30,8 +35,17 @@ public class LocalUser {
     @Column(name = "lastname", nullable = false)
     private String lastName;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true,fetch = FetchType.EAGER)
     private List<Address> addresses = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "localUser", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
+    @OrderBy("id desc")
+    private List<VerificationToken> verificationTokens = new ArrayList<>();
+
+    @Column(name = "is_email_verified", nullable = false)
+    private Boolean isEmailVerified = false;
 
 
     public LocalUser() {
@@ -103,16 +117,21 @@ public class LocalUser {
         this.addresses = addresses;
     }
 
-    @Override
-    public String toString() {
-        return "LocalUser{" +
-                "id=" + id +
-                ", userName='" + userName + '\'' +
-                ", password='" + password + '\'' +
-                ", email='" + email + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", addresses=" + addresses +
-                '}';
+    public List<VerificationToken> getVerificationTokens() {
+        return verificationTokens;
     }
+
+    public void setVerificationTokens(List<VerificationToken> verificationTokens) {
+        this.verificationTokens = verificationTokens;
+    }
+
+    public Boolean getIsEmailVerified() {
+        return isEmailVerified;
+    }
+
+    public void setIsEmailVerified(Boolean isEmailVerified) {
+        this.isEmailVerified = isEmailVerified;
+    }
+
+
 }

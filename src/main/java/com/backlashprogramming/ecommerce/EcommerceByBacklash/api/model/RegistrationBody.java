@@ -1,11 +1,33 @@
 package com.backlashprogramming.ecommerce.EcommerceByBacklash.api.model;
 
+import jakarta.validation.constraints.*;
+
 public class RegistrationBody {
 
+    @NotNull
+    @NotBlank
+    @Size(min = 3, max = 32)
     private  String username;
+
+    @NotNull
+    @NotBlank
+    @Email
     private  String email;
+
+    @NotNull
+    @NotBlank
+    @Size(min = 3, max = 32)
+    @Pattern(regexp = "^.*(?=.{6,})(?=..*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$")
     private  String password;
+
+    @NotNull
+    @NotBlank
+    @Size(min = 3, max = 32)
     private  String firstName;
+
+    @NotNull
+    @NotBlank
+    @Size(min = 3, max = 32)
     private  String lastName;
 
     public RegistrationBody(){

@@ -22,7 +22,7 @@ public class Orders {
     @JoinColumn(name = "address_id", nullable = false)
     private Address address;
 
-    @OneToMany(mappedBy = "orders", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "orders", cascade = CascadeType.REMOVE, orphanRemoval = true,fetch = FetchType.EAGER)
     private List<OrderQuantities> quantities = new ArrayList<>();
 
 
@@ -68,13 +68,4 @@ public class Orders {
         this.quantities = quantities;
     }
 
-    @Override
-    public String toString() {
-        return "Orders{" +
-                "id=" + id +
-                ", user=" + user +
-                ", address=" + address +
-                ", quantities=" + quantities +
-                '}';
-    }
 }

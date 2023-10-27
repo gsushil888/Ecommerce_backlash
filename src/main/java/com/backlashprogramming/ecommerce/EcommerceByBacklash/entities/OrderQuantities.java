@@ -1,5 +1,6 @@
 package com.backlashprogramming.ecommerce.EcommerceByBacklash.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -17,6 +18,7 @@ public class OrderQuantities {
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
 
+    @JsonIgnore
     @ManyToOne(optional = false)
     @JoinColumn(name = "orders_id", nullable = false)
     private Orders orders;
@@ -63,13 +65,4 @@ public class OrderQuantities {
         this.orders = orders;
     }
 
-    @Override
-    public String toString() {
-        return "OrderQuantities{" +
-                "id=" + id +
-                ", product=" + product +
-                ", quantity=" + quantity +
-                ", orders=" + orders +
-                '}';
-    }
 }

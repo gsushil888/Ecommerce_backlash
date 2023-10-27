@@ -22,7 +22,7 @@ public class Product {
     @Column(name = "price", nullable = false)
     private Double price;
 
-    @OneToOne(mappedBy = "product", cascade = CascadeType.REMOVE, optional = false, orphanRemoval = true)
+    @OneToOne(mappedBy = "product", cascade = CascadeType.REMOVE, optional = false, orphanRemoval = true,fetch = FetchType.EAGER)
     private Inventory inventory;
 
     public Product() {
@@ -85,15 +85,4 @@ public class Product {
         this.inventory = inventory;
     }
 
-    @Override
-    public String toString() {
-        return "Product{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", shortDescription='" + shortDescription + '\'' +
-                ", longDescription='" + longDescription + '\'' +
-                ", price=" + price +
-                ", inventory=" + inventory +
-                '}';
-    }
 }

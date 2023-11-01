@@ -1,4 +1,4 @@
-package com.backlashprogramming.ecommerce.EcommerceByBacklash.test;
+package com.backlashprogramming.ecommerce.EcommerceByBacklash.mytest;
 
 
 import org.springframework.web.bind.annotation.GetMapping;

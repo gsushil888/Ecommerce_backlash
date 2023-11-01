@@ -40,7 +40,7 @@ public class LocalUser {
     @OrderBy("id desc")
     private List<VerificationToken> verificationTokens = new ArrayList<>();
 
-    @Column(name = "is_email_verified", nullable = false)
+    @Column(name = "email_verified", nullable = false)
     private Boolean isEmailVerified = false;
 
 
@@ -121,13 +121,26 @@ public class LocalUser {
         this.verificationTokens = verificationTokens;
     }
 
-    public Boolean getIsEmailVerified() {
+    public boolean getIsEmailVerified() {
         return isEmailVerified;
     }
 
-    public void setIsEmailVerified(Boolean isEmailVerified) {
+    public void setIsEmailVerified(boolean isEmailVerified) {
         this.isEmailVerified = isEmailVerified;
     }
 
-
+    @Override
+    public String toString() {
+        return "LocalUser{" +
+                "id=" + id +
+                ", userName='" + userName + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", addresses=" + addresses +
+                ", verificationTokens=" + verificationTokens +
+                ", isEmailVerified=" + isEmailVerified +
+                '}';
+    }
 }

@@ -1,11 +1,13 @@
-package com.backlashprogramming.ecommerce.EcommerceByBacklash.api.controller.auth;
+package com.backlashprogramming.ecommerce.EcommerceByBacklash.api.controller;
 
 
 import com.backlashprogramming.ecommerce.EcommerceByBacklash.api.model.LoginBody;
 import com.backlashprogramming.ecommerce.EcommerceByBacklash.api.model.LoginResponse;
+import com.backlashprogramming.ecommerce.EcommerceByBacklash.api.model.PasswordResetBody;
 import com.backlashprogramming.ecommerce.EcommerceByBacklash.api.model.RegistrationBody;
 import com.backlashprogramming.ecommerce.EcommerceByBacklash.entities.LocalUser;
 import com.backlashprogramming.ecommerce.EcommerceByBacklash.exception.EmailFailureException;
+import com.backlashprogramming.ecommerce.EcommerceByBacklash.exception.EmailNotFoundException;
 import com.backlashprogramming.ecommerce.EcommerceByBacklash.exception.UserAlreadyExistsException;
 import com.backlashprogramming.ecommerce.EcommerceByBacklash.exception.UserNotVerifiedException;
 import com.backlashprogramming.ecommerce.EcommerceByBacklash.service.UserService;
@@ -27,11 +29,11 @@ public class AuthenticationController {
     public ResponseEntity registerUser(@Valid @RequestBody RegistrationBody registrationBody) {
         try {
             userService.registerUser(registrationBody);
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok().body("Registered Successfully...");
         } catch (UserAlreadyExistsException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("UserAlreadyExistsException ");
         } catch (EmailFailureException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("EmailFailureException");
         }
     }
 
@@ -58,13 +60,18 @@ public class AuthenticationController {
         } else {
             LoginResponse response = new LoginResponse();
             response.setJwt(jwt);
+            response.setSuccess(true);
             return ResponseEntity.ok(response);
         }
     }
 
     @PostMapping("/verify")
-    public  ResponseEntity verifyEmail(@RequestParam String token){
-        return  null;
+    public ResponseEntity verifyEmail(@RequestParam String token) {
+        if (userService.verifyUser(token)) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
     }
 
     @GetMapping("/me")
@@ -72,5 +79,22 @@ public class AuthenticationController {
         return user;
     }
 
+    @PostMapping("/forgot")
+    public ResponseEntity forgotPassword(@RequestParam String email) {
+        try {
+            userService.forgotPassword(email);
+            return ResponseEntity.ok().build();
+        } catch (EmailNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        } catch (EmailFailureException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @PostMapping("/reset")
+    public ResponseEntity resetPassword(@Valid @RequestBody PasswordResetBody body) {
+        userService.resetPassword(body);
+        return ResponseEntity.ok().build();
+    }
 
 }

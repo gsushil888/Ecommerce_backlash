@@ -1,8 +1,9 @@
-package com.backlashprogramming.ecommerce.EcommerceByBacklash.api.controller.order;
+package com.backlashprogramming.ecommerce.EcommerceByBacklash.api.controller;
 
 
 import com.backlashprogramming.ecommerce.EcommerceByBacklash.entities.LocalUser;
 import com.backlashprogramming.ecommerce.EcommerceByBacklash.entities.Orders;
+import com.backlashprogramming.ecommerce.EcommerceByBacklash.entities.Product;
 import com.backlashprogramming.ecommerce.EcommerceByBacklash.service.OrderService;
 import com.backlashprogramming.ecommerce.EcommerceByBacklash.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,17 +15,16 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/order")
-public class OrderController {
+@RequestMapping("/product")
+public class ProductController {
 
     @Autowired
-    private OrderService orderService;
-
+    private ProductService productService;
 
     @GetMapping("/")
-    public List<Orders> getOrders(@AuthenticationPrincipal LocalUser user){
-        return orderService.getOrders(user);
+    public List<Product> getProducts(){
+        return productService.getProducts();
     }
-
+    
 
 }

@@ -1,6 +1,7 @@
 package com.backlashprogramming.ecommerce.EcommerceByBacklash.service;
 
 
+import com.backlashprogramming.ecommerce.EcommerceByBacklash.entities.LocalUser;
 import com.backlashprogramming.ecommerce.EcommerceByBacklash.entities.VerificationToken;
 import com.backlashprogramming.ecommerce.EcommerceByBacklash.exception.EmailFailureException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,20 @@ public class EmailService {
             javaMailSender.send(message);
         }
         catch (MailException e){
+            throw new EmailFailureException();
+        }
+    }
+
+    public void sendPasswordResetEmail(LocalUser user, String token) throws EmailFailureException {
+        SimpleMailMessage message = makeMailMessage();
+        message.setTo(user.getEmail());
+        message.setSubject("Your password reset request link.");
+        message.setText("You requested a password reset on our website. Please " +
+                "find the link below to be able to reset your password.\n" + url +
+                "/auth/reset?token=" + token);
+        try {
+            javaMailSender.send(message);
+        } catch (MailException ex) {
             throw new EmailFailureException();
         }
     }

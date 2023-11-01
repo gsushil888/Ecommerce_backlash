@@ -1,5 +1,6 @@
 package com.backlashprogramming.ecommerce.EcommerceByBacklash.api.security;
 
+import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.backlashprogramming.ecommerce.EcommerceByBacklash.dao.LocalUserDao;
 import com.backlashprogramming.ecommerce.EcommerceByBacklash.entities.LocalUser;
 import com.backlashprogramming.ecommerce.EcommerceByBacklash.service.JwtService;
@@ -49,8 +50,8 @@ public class JWTRequestFilter extends OncePerRequestFilter {
                 }
 
             }
-            catch (Exception e){
-                log.error("Something went wrong at filter");
+            catch (JWTDecodeException e){
+                log.error("Something went wrong while decoding jwt.");
             }
         }
         filterChain.doFilter(request,response);

@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface VerificationTokenDao extends JpaRepository<VerificationToken,Long> {
@@ -18,5 +19,7 @@ public interface VerificationTokenDao extends JpaRepository<VerificationToken,Lo
     @Modifying
     @Query("delete from VerificationToken v where v.localUser = ?1")
     void deleteByLocalUser(LocalUser localUser);
+
+    List<VerificationToken> findByUser_IdOrderByIdDesc(Long id);
 
 }

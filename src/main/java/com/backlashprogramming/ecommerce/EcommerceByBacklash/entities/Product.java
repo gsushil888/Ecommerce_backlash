@@ -1,5 +1,6 @@
 package com.backlashprogramming.ecommerce.EcommerceByBacklash.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -22,6 +23,7 @@ public class Product {
     @Column(name = "price", nullable = false)
     private Double price;
 
+    @JsonIgnore
     @OneToOne(mappedBy = "product", cascade = CascadeType.REMOVE, optional = false, orphanRemoval = true,fetch = FetchType.EAGER)
     private Inventory inventory;
 
